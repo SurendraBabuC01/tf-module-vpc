@@ -26,19 +26,15 @@ resource "aws_internet_gateway" "igw" {
 
 resource "aws_eip" "ngw" {
   count = length(lookup(lookup(var.subnets, "public", null), "cidr_block", 0))
-  vpc = true
+  vpc   = true
 
   tags = merge(var.tags, { Name = "${var.env}-ngw-${count.index+1}" })
 }
 
-#resource "aws_nat_gateway" "ngw" {
-#  count = length(lookup(lookup(var.subnets, "public", null), "cidr_block", 0))
-#  allocation_id = aws_eip.ngw[count.index].id
-#  subnet_id     = aws_subnet.example.id
-#
-#  tags = merge(var.tags, { Name = "${var.env}-ngw-${count.index+1}" })
-#}
+resource "aws_nat_gateway" "ngw" {
+  count         = length(lookup(lookup(var.subnets, "public", null), "cidr_block", 0))
+  allocation_id = aws_eip.ngw[count.index].id
+  subnet_id     = module.subnets["public"].subnet_ids[count.index]
 
-output "subnet_ids" {
-  value = module.subnets
+  tags = merge(var.tags, { Name = "${var.env}-ngw-${count.index+1}" })
 }
