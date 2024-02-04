@@ -39,10 +39,6 @@ resource "aws_nat_gateway" "ngw" {
   tags = merge(var.tags, { Name = "${var.env}-ngw-${count.index+1}" })
 }
 
-output "subnets" {
-  value = module.subnets
-}
-
 resource "aws_route" "igw" {
   count                  = length(module.subnets["public"].route_table_ids)
   route_table_id         = module.subnets["public"].route_table_ids[count.index]
