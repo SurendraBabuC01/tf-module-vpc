@@ -13,3 +13,8 @@ resource "aws_route_table" "main" {
 
   tags = merge(var.tags, { Name = "${var.env}-${var.name}-rt-${count.index+1}" })
 }
+
+#resource "aws_route_table_association" "associate" {
+#  subnet_id      = aws_subnet.foo.id
+#  route_table_id = aws_route_table.bar.id
+#}
