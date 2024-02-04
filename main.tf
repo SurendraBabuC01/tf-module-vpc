@@ -44,7 +44,7 @@ output "subnets" {
 }
 
 resource "aws_route" "igw" {
-  count = length(module.subnets["public"].route_table_ids)
-  route_table_id            = module.subnets["public"].route_table_ids[count.index]
-  destination_cidr_block    = "0.0.0.0/0"
+  count                  = length(module.subnets["public"].route_table_ids)
+  route_table_id         = module.subnets["public"].route_table_ids[count.index]
+  destination_cidr_block = "0.0.0.0/0"
 }
